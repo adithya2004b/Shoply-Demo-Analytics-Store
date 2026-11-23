@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoply — Demo Analytics Store</title>
+  <meta name="description" content="A demo storefront for GA4 event tracking and Ask Your Data analytics." />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- GA4: Replace G-XXXXXXXXXX with your measurement ID.
+       Leave placeholder as-is to run the site without sending data to GA4. -->
+  <script>
+    window.DEMO_GA_ID = "G-XXXXXXXXXX";
+  </script>
+  <script>
+    if (window.DEMO_GA_ID && !window.DEMO_GA_ID.includes("X")) {
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + window.DEMO_GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", window.DEMO_GA_ID, { send_page_view: true });
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      console.info("[Demo] GA4 disabled. Add your Measurement ID in index.html to enable collection.");
+    }
+  </script>
+</head>
+<body>
+  <div class="announcement" data-track="announcement">Free shipping on orders over $75 · Demo storefront for analytics</div>
+  <header class="site-header">
+    <a class="brand" href="#" data-nav="home" aria-label="Shoply home">shoply<span>.</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <button class="nav-link active" data-nav="home">Home</button>
+      <button class="nav-link" data-nav="shop">Shop</button>
+      <button class="nav-link" data-nav="about">About</button>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="searchToggle" aria-label="Open search">⌕</button>
+      <button class="icon-btn" id="accountBtn" aria-label="Account">♙</button>
+      <button class="cart-btn" id="cartToggle">Cart <span id="cartCount">0</span></button>
+    </div>
+  </header>
+
+  <section class="search-panel hidden" id="searchPanel">
+    <label for="siteSearch">Search the store</label>
+    <div class="search-row">
+      <input id="siteSearch" type="search" placeholder="Try headphones, bag, bottle..." />
+      <button id="searchSubmit" class="primary-btn">Search</button>
+      <button id="searchClose" class="icon-btn" aria-label="Close search">×</button>
+    </div>
+    <p id="searchFeedback" class="muted"></p>
+  </section>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">DESIGNED FOR EVERYDAY</p>
+        <h1>Good things.<br /><em>Better days.</em></h1>
+        <p class="hero-description">Thoughtful essentials for work, weekends, and everything in between.</p>
+        <button class="primary-btn" data-action="hero_shop_click">Explore collection <span>↗</span></button>
+        <div class="hero-note">New season essentials · Curated with care</div>
+      </div>
+      <div class="hero-art">
+        <div class="art-shape shape-a"></div><div class="art-shape shape-b"></div>
+        <div class="hero-card">
+          <span class="art-label">WEEKEND<br />READY</span>
+          <div class="hero-product-art">✦</div>
+          <span class="art-caption">The everyday edit</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip">
+      <div>✦ Thoughtfully selected</div><div>↗ Easy returns</div><div>◇ Secure checkout</div><div>♡ Made for daily use</div>
+    </section>
+
+    <section class="section" id="shopSection">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE COLLECTION</p><h2>Find your everyday favorite</h2></div>
+        <p class="muted">Simple essentials. Made to last.</p>
+      </div>
+      <div class="filters" id="categoryFilters">
+        <button class="filter-chip selected" data-category="all">All items</button>
+        <button class="filter-chip" data-category="tech">Tech</button>
+        <button class="filter-chip" data-category="carry">Carry</button>
+        <button class="filter-chip" data-category="home">Home</button>
+        <button class="filter-chip" data-category="wellness">Wellness</button>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+      <p class="empty-state hidden" id="emptyState">No items match your search. Try another term.</p>
+    </section>
+
+    <section class="promo" id="promo">
+      <div><p class="eyebrow">A LITTLE EXTRA</p><h2>Make your daily routine<br />feel a little better.</h2><p>Explore useful things that make everyday moments easier.</p></div>
+      <button class="secondary-btn" data-action="promo_click">Discover more ↗</button>
+    </section>
+
+    <section class="newsletter section">
+      <div><p class="eyebrow">THE SHOPLY LETTER</p><h2>Good finds, in your inbox.</h2><p class="muted">Occasional updates, new arrivals, and thoughtful ideas.</p></div>
+      <form id="newsletterForm" class="newsletter-form">
+        <input id="newsletterEmail" type="email" placeholder="Your email address" required />
+        <button class="primary-btn" type="submit">Sign me up</button>
+      </form>
+      <p id="newsletterMessage" class="muted"></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="brand" href="#" data-nav="home">shoply<span>.</span></a>
+    <div class="footer-links"><button data-footer="privacy">Privacy</button><button data-footer="help">Help</button><button data-footer="contact">Contact</button></div>
+    <small>Demo website for GA4 tracking practice · No real transactions are processed</small>
+  </footer>
+
+  <div class="overlay hidden" id="overlay"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+    <div class="drawer-header"><h2>Your cart</h2><button class="icon-btn" id="cartClose">×</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-summary"><div><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div><button class="primary-btn full" id="checkoutBtn">Proceed to checkout</button><p class="muted small">Demo only — no payment is collected.</p></div>
+  </aside>
+
+  <div class="modal hidden" id="modal">
+    <button class="icon-btn modal-close" id="modalClose">×</button>
+    <div id="modalContent"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
